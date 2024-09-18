@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #32a852, #a0ff84);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            margin: 10px;
+        }
+
+        .container img {
+            max-width: 200px;
+            margin-bottom: 20px;
+        }
+
+        .container h2 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .container input {
+            width: calc(100% - 24px); /* Adjust width to fit inside container */
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+            box-sizing: border-box; /* Ensures padding does not exceed container width */
+        }
+
+        .container button {
+            width: calc(100% - 24px); /* Adjust width to fit inside container */
+            padding: 12px;
+            background-color: #32a852;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px 0;
+            box-sizing: border-box; /* Ensures padding does not exceed container width */
+        }
+
+        .container button:hover {
+            background-color: #279d46;
+        }
+
+        .container p {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .container a {
+            color: #32a852;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .container a:hover {
+            text-decoration: underline;
+        }
+
+        #error-message {
+            color: red;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 15px;
+                margin: 5px;
+            }
+
+            .container img {
+                max-width: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="src/drone.jpg" alt="App Logo"> <!-- Replace with your logo -->
+        <h2>Sign In</h2>
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button id="signInBtn">Sign In</button>
+        <p id="error-message"></p>
+        <p>Don't have an account? <a href="signup.html">Sign up here</a></p>
+    </div>
+
+    <!-- Load Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+
+    <!-- Your custom script -->
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyD4kYnLgUzzIZt1XUWL9DEQ5j-YhbE1C_0",
+            authDomain: "farm-monitoring-7d029.firebaseapp.com",
+            projectId: "farm-monitoring-7d029",
+            storageBucket: "farm-monitoring-7d029.appspot.com",
+            messagingSenderId: "205970011096",
+            appId: "1:205970011096:web:5a0718eb27438d499af8ad"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Reference Firebase Auth
+        const auth = firebase.auth();
+
+        // Sign in when button is clicked
+        const signInBtn = document.getElementById('signInBtn');
+        signInBtn.addEventListener('click', () => {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            auth.signInWithEmailAndPassword(email, password)
+                .then(userCredential => {
+                    // Successful login
+                    console.log("User signed in: ", userCredential.user);
+                    window.location.href = "main.html"; // Redirect to main page
+                })
+                .catch(error => {
+                    // Display error message if sign-in fails
+                    document.getElementById('error-message').textContent = "Incorrect username or password.";
+                    console.error("Error signing in: ", error);
+                });
+        });
+
+        // Check if user is already signed in
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                window.location.href = "main.html"; // Redirect to main page if user is already signed in
+            }
+        });
+    </script>
+</body>
+</html>
